@@ -1,20 +1,28 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import {CLIENT_URL} from './api';
 
 export default class App extends Component {
   state = {
     title: '',
     posts: [],
+    isLoading: true,
   };
 
   componentDidMount() {
-    axios.get(`http://localhost:3001/posts`).then(res => {
-      const data = res.data;
+    axios
+      .get(`${CLIENT_URL}/posts`)
+      .then(res => {
+        const data = res.data;
 
-      this.setState({
-        posts: data,
+        this.setState({
+          posts: data,
+          isLoading: false,
+        });
+      })
+      .then(err => {
+        console.log(err);
       });
-    });
   }
 
   handleChange = e => {
@@ -31,35 +39,28 @@ export default class App extends Component {
       title: title,
     };
 
-    axios.post(`http://localhost:3001/posts`, data).then(() => {
+    axios.post(`${CLIENT_URL}/posts`, data).then(() => {
       console.log('success');
     });
   };
 
   handleDelte = id => {
-    axios.delete(`http://localhost:3001/posts/` + id).then(() => {
-      console.log('success');
-    });
+    axios
+      .delete(`${CLIENT_URL}/posts/` + id)
+      .then(() => {
+        console.log('success');
+      })
+      .then(err => {
+        console.log(err);
+      });
   };
 
   render() {
-    const {title, posts} = this.state;
+    const {title, posts, isLoading} = this.state;
+
     return (
       <div className="App">
         App
-        <div>
-          {posts.map(post => (
-            <React.Fragment key={post.id}>
-              {post.title}
-              <button
-                onClick={() => {
-                  this.handleDelte(post.id);
-                }}>
-                削除
-              </button>
-            </React.Fragment>
-          ))}
-        </div>
         <input
           type="text"
           name="title"
@@ -67,6 +68,25 @@ export default class App extends Component {
           onChange={this.handleChange}
         />
         <button onClick={this.handleSubmit}>追加</button>
+        <div>
+          {isLoading ? (
+            <div>Loading</div>
+          ) : (
+            <>
+              {posts.map(post => (
+                <React.Fragment key={post.id}>
+                  {post.title}
+                  <button
+                    onClick={() => {
+                      this.handleDelte(post.id);
+                    }}>
+                    削除
+                  </button>
+                </React.Fragment>
+              ))}
+            </>
+          )}
+        </div>
       </div>
     );
   }
