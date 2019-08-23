@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import {CLIENT_URL} from './api';
+import {CLIENT_URL} from '../helper/api';
+import Card from '../components/Card';
+import Loading from '../components/Loading';
 
 export default class App extends Component {
   state = {
@@ -9,6 +11,7 @@ export default class App extends Component {
     isLoading: true,
   };
 
+  // GET all post. Endpoint /posts
   componentDidMount() {
     axios
       .get(`${CLIENT_URL}/posts`)
@@ -25,11 +28,19 @@ export default class App extends Component {
       });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const {foo, bar} = prevProps;
+    if (prevState.baz && this.props.isLoading) {
+    }
+    console.log('didupdate');
+  }
+
   handleChange = e => {
     const {name, value} = e.target;
     this.setState({[name]: value});
   };
 
+  // CREATE
   handleSubmit = e => {
     e.preventDefault();
 
@@ -37,14 +48,19 @@ export default class App extends Component {
 
     const data = {
       title: title,
+      created_at: Date.now(),
     };
 
     axios.post(`${CLIENT_URL}/posts`, data).then(() => {
       console.log('success');
+      this.setState({
+        title: '',
+      });
     });
   };
 
-  handleDelte = id => {
+  // DELETE
+  handleDelete = id => {
     axios
       .delete(`${CLIENT_URL}/posts/` + id)
       .then(() => {
@@ -58,6 +74,9 @@ export default class App extends Component {
   render() {
     const {title, posts, isLoading} = this.state;
 
+    // if (!!posts) {
+    //   return <div>表示するポストがありません</div>;
+    // }
     return (
       <div className="App">
         App
@@ -70,20 +89,10 @@ export default class App extends Component {
         <button onClick={this.handleSubmit}>追加</button>
         <div>
           {isLoading ? (
-            <div>Loading</div>
+            <Loading />
           ) : (
             <>
-              {posts.map(post => (
-                <React.Fragment key={post.id}>
-                  {post.title}
-                  <button
-                    onClick={() => {
-                      this.handleDelte(post.id);
-                    }}>
-                    削除
-                  </button>
-                </React.Fragment>
-              ))}
+              <Card posts={posts} handleDelete={this.handleDelete} />
             </>
           )}
         </div>
