@@ -18,15 +18,18 @@
     "extends": "react-app"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
+    "production": [">0.2%", "not dead", "not op_mini all"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "json-server": "^0.15.0",
+    "prettier": "^1.18.2"
+  },
+  "scripts": {
+    "json-server": "json-server --watch db.json -p 3001"
   }
 }
