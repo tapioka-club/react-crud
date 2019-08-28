@@ -38,5 +38,17 @@
   "devDependencies": {
     "json-server": "^0.15.0",
     "prettier": "^1.18.2"
-  }
+  },
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tapioka-club/react-crud.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tapioka-club/react-crud/issues"
+  },
+  "homepage": "https://github.com/tapioka-club/react-crud#readme"
 }
